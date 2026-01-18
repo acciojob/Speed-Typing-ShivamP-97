@@ -17,12 +17,10 @@ container.appendChild(quoteInput);
 
 const timerElement = document.createElement('div');
 timerElement.classList.add('timer');
-timerElement.textContent = '0'; 
+timerElement.textContent = '0';
 container.appendChild(timerElement);
 
-let timer;
-let startTime;
-let quote = '';
+let timer, startTime, quote = '';
 let waitingForNext = false;
 
 async function getQuote() {
@@ -32,7 +30,6 @@ async function getQuote() {
     const data = await res.json();
     quote = data.content;
     displayQuote();
-    timerElement.textContent = '0'; 
   } catch (err) {
     quoteDisplay.textContent = 'Error fetching quote!';
   }
@@ -45,7 +42,6 @@ function displayQuote() {
     span.textContent = char;
     quoteDisplay.appendChild(span);
   });
-
   quoteInput.value = '';
   startTimer();
 }
@@ -70,7 +66,6 @@ quoteInput.addEventListener('input', () => {
 
   quoteChars.forEach((charSpan, index) => {
     const typedChar = inputChars[index];
-
     if (typedChar == null) {
       charSpan.classList.remove('correct');
       charSpan.classList.remove('incorrect');
@@ -87,18 +82,10 @@ quoteInput.addEventListener('input', () => {
 
   if (correct && inputChars.length === quoteChars.length) {
     waitingForNext = true;
-    clearInterval(timer);
-
-    let waitStart = new Date();
-    const waitTimer = setInterval(() => {
-      const elapsed = Math.floor((new Date() - waitStart) / 1000) + 1;
-      timerElement.textContent = `${elapsed}`;
-    }, 1000);
-
     setTimeout(() => {
-      clearInterval(waitTimer);
-      getQuote(); 
-    }, 3000);
+      timerElement.textContent = '0';
+      getQuote();
+    }, 2000);
   }
 });
 
